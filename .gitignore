@@ -1,0 +1,7 @@
+.env
+.streamlit/secrets.toml
+.claude/settings.local.json
+node_modules/
+.next/
+__pycache__/
+*.pyc
