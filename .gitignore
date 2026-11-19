@@ -1,7 +1,13 @@
 .env
+.env.*
+!.env.example
 .streamlit/secrets.toml
 .claude/settings.local.json
 node_modules/
 .next/
 __pycache__/
 *.pyc
+db/snapshots/
+*.tsbuildinfo
+next-env.d.ts
+coverage/
