@@ -80,9 +80,10 @@ describe("모의 API 클라이언트", () => {
     await expect(c.deleteEntry(e.id)).rejects.toBeInstanceOf(ApiClientError);
   });
 
-  it("기본 모드는 모의, real이면 실제 클라이언트", () => {
+  it("기본 모드는 실제 API, mock이면 모의 클라이언트", () => {
     expect(createApiClient(undefined)).toBeDefined();
-    expect(createApiClient("real")).not.toBe(createApiClient("real"));
+    expect(createApiClient(undefined)).not.toBe(createApiClient(undefined));
+    expect(createApiClient("mock")).not.toBe(createApiClient("mock"));
   });
 });
 

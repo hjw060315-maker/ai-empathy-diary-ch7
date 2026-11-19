@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { signInWithGoogle } from "../actions";
 
 export const metadata: Metadata = { title: "로그인 - AI 공감 다이어리" };
 
-// 자리만 만든 화면. 구글 로그인은 3단계(Auth.js)에서 연결한다.
 export default function LoginPage() {
   return (
     <main id="main" className="page page--narrow" tabIndex={-1}>
@@ -13,15 +12,12 @@ export default function LoginPage() {
         있어요.
       </p>
       <div className="card login">
-        <button type="button" className="btn btn--primary btn--block" disabled aria-describedby="login-help">
-          구글로 시작하기
-        </button>
-        <p id="login-help" className="muted">
-          구글 로그인은 곧 연결돼요. 지금은 준비 중이라 누를 수 없어요.
-        </p>
-        <Link className="login__back" href="/">
-          일기장 화면 미리 보기
-        </Link>
+        <form action={signInWithGoogle}>
+          <button type="submit" className="btn btn--primary btn--block">
+            구글로 시작하기
+          </button>
+        </form>
+        <p className="muted">구글 계정으로 로그인하면 바로 일기를 쓸 수 있어요.</p>
       </div>
     </main>
   );

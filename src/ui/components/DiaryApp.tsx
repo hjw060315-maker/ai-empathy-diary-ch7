@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LIST_PAGE_SIZE } from "@/shared/constants";
 import type { Entry } from "@/shared/types";
@@ -17,7 +18,13 @@ function messageOf(e: unknown): { text: string; needLogin: boolean } {
   return { text: "문제가 생겼어요. 잠시 후 다시 시도해 주세요.", needLogin: false };
 }
 
-export function DiaryApp() {
+export function DiaryApp({
+  userLabel = null,
+  signOutAction,
+}: {
+  userLabel?: string | null;
+  signOutAction?: () => void | Promise<void>;
+}) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("loading");
@@ -29,6 +36,7 @@ export function DiaryApp() {
   const [newId, setNewId] = useState<string | null>(null);
   const [status, setStatus] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const router = useRouter();
 
   const loadFirst = useCallback(async () => {
     setLoadState("loading");
@@ -39,10 +47,13 @@ export function DiaryApp() {
       setNextCursor(page.nextCursor);
       setLoadState("ready");
     } catch (e) {
-      setListError(messageOf(e));
+      const m = messageOf(e);
+      setListError(m);
       setLoadState("error");
+      // 로그인이 풀렸으면 로그인 화면으로 안내한다(글 쓰기는 입력칸이 그대로 남는다).
+      if (m.needLogin) router.push("/login");
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // 처음 한 번 지난 기록을 불러온다 (외부 데이터와 맞추는 일)
@@ -114,9 +125,20 @@ export function DiaryApp() {
       <header className="site-header">
         <div className="site-header__inner">
           <p className="site-header__title">AI 공감 다이어리</p>
-          <Link className="site-header__link" href="/login">
-            로그인
-          </Link>
+          <div className="site-header__user">
+            {userLabel && <span className="site-header__name">{userLabel}님</span>}
+            {signOutAction ? (
+              <form action={signOutAction}>
+                <button type="submit" className="btn btn--ghost">
+                  로그아웃
+                </button>
+              </form>
+            ) : (
+              <Link className="site-header__link" href="/login">
+                로그인
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
