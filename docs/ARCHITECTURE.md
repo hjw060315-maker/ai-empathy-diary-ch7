@@ -36,6 +36,7 @@
 | `analyzeDiary(content): Promise<AiAnalysis>` | `src/ai/index.ts` | 서버 → AI. 둘 다 실패하면 `AiUnavailableError` |
 | `detectCrisisByRules(content): boolean` | `src/ai/index.ts` | 서버 → AI(규칙 감지). AI 실패와 무관하게 동작 |
 | `getCurrentUserId(): Promise<string \| null>` | `src/server/auth.ts` | 라우트에서 사용자 확인. 구글 값이 비면 개발용 모의 사용자 |
+| `signIn`, `signOut`, `auth`, `handlers` | `src/server/auth.ts` | Auth.js. 화면은 서버 액션에서 `signIn("google", { redirectTo: "/" })`, `signOut({ redirectTo: "/login" })`만 부른다 |
 | 타입·상수·검증 | `src/shared/*` | `Entry`, `AiAnalysis`, 상담 연락처 `CRISIS_CONTACTS`, 글자 수 상한 등 |
 
 ## 폴더 구조
@@ -83,3 +84,11 @@ docs/               PRD, PLAN, API, ARCHITECTURE
 | `npm run typecheck` | 타입 검사 |
 | `npm test` | 시험(vitest) |
 | `npm run db:migrate` | 마이그레이션 적용(`.env`의 `DATABASE_URL` 사용) |
+
+## 인증 (Auth.js)
+
+- next-auth v5(beta), 구글 제공자, 세션은 JWT(쿠키). 라우트는 `src/app/api/auth/[...nextauth]/route.ts`.
+- `src/proxy.ts`(Next.js 16의 middleware 후속)가 로그인하지 않은 페이지 요청을 `/login`으로 보낸다. `/api/*`는 제외하고 각 라우트가 401로 답한다. 구글 값이 비고 개발 중이면 막지 않는다.
+- **사용자 식별값 = 구글 계정 id(`sub`)**. DB의 `user_id`에는 `google:<sub>` 형태로 저장한다. 이메일은 사용자가 바꿀 수 있고 재사용될 수 있지만 `sub`는 계정에 평생 고정되어 있어 데이터 소유자 구분에 더 안정적이다(접두사는 나중에 다른 로그인 방식이 생겨도 값이 겹치지 않게 하려는 것).
+- 구글 값 3개 중 하나라도 비면 개발에서는 `dev-mock-user`, 운영(production)에서는 401.
+- 확인 스크립트: `npm run db:check`(시험용 `itest-` 사용자로 저장·목록·삭제·격리를 실제 DB에서 확인하고 시험 행을 모두 지운다).
