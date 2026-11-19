@@ -8,6 +8,7 @@ import type { Entry } from "@/shared/types";
 import { apiClient, ApiClientError } from "@/ui/api-client";
 import { EntryCard } from "./EntryCard";
 import { EntryForm } from "./EntryForm";
+import { SupportContacts } from "./SupportContacts";
 
 type LoadState = "loading" | "ready" | "error";
 
@@ -227,6 +228,8 @@ export function DiaryApp({
             </div>
           )}
         </section>
+
+        <SupportContacts />
       </main>
     </>
   );

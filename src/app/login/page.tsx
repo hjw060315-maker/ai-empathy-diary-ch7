@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SupportContacts } from "@/ui/components/SupportContacts";
 import { signInWithGoogle } from "../actions";
 
 export const metadata: Metadata = { title: "로그인 - AI 공감 다이어리" };
@@ -19,6 +20,7 @@ export default function LoginPage() {
         </form>
         <p className="muted">구글 계정으로 로그인하면 바로 일기를 쓸 수 있어요.</p>
       </div>
+      <SupportContacts />
     </main>
   );
 }

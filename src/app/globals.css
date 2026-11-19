@@ -546,6 +546,61 @@ a {
   color: var(--muted);
 }
 
+/* 상시 상담 안내: 평소에는 작고 조용하게. 카드 없이 한 줄 목록이고, 일기(갈색)와 구분되도록 청회색을 쓴다.
+   위기 표현이 감지된 일기에서는 별도의 큰 안내 상자(.crisis)가 나온다. */
+.support {
+  --support-text: #3b5368;
+  --support-line: #b4c3d0;
+  margin-top: 40px;
+  padding: 12px 0 4px;
+  border-top: 1px solid var(--support-line);
+  color: var(--support-text);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.support__title {
+  margin: 0 0 2px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--support-text);
+}
+
+.support__text {
+  margin: 0 0 6px;
+  font-size: 0.8125rem;
+  color: var(--support-text);
+}
+
+.support__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.support__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  color: var(--support-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.support__link:hover .support__number {
+  text-decoration-thickness: 2px;
+}
+
+.support__number {
+  font-weight: 800;
+  color: var(--support-text);
+  text-decoration: underline;
+}
+
 /* 로그인 */
 .login {
   display: grid;
